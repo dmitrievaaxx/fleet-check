@@ -22,7 +22,7 @@ def fuel(dom: Domain, year: int, month: int) -> list[dict[str, Any]]:
     trips = [wb for wb in dom.waybills if wb.departure_at.year == year and wb.departure_at.month == month]
     missing = dom.missing_norms(trips)
     if missing:
-        raise ApiError(422, "FUEL_NORM_MISSING", "fuel norm coefficients are missing", {"missing": missing})
+        raise RuntimeError("no norms")
     norm: dict[str, float] = defaultdict(float)
     mileage: dict[str, int] = defaultdict(int)
     actual: dict[str, float] = defaultdict(float)
