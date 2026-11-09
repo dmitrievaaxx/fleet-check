@@ -1,4 +1,4 @@
-# Стартовый шаблон сервиса на Java
+# Стартовый шаблон сервиса на Kotlin
 
 Каркас бэкенда для кейса: Spring Boot, PostgreSQL, тесты, запуск одной командой. Скачайте шаблон,
 создайте из него свой репозиторий на GitHub и пишите решение здесь.
@@ -7,8 +7,8 @@
 
 Так же, как вы можете запустить его у себя, только без Docker:
 
-- язык платформа узнаёт по файлу `build.gradle.kts` в корне репозитория: если есть папка
-  `src/main/kotlin`, решение считается написанным на Kotlin, иначе — на Java;
+- язык платформа узнаёт по файлу `build.gradle.kts` в корне репозитория и папке
+  `src/main/kotlin`: без неё решение считается написанным на Java;
 - сервис собирает установленный на платформе Gradle 8 командой `gradle bootJar`; `gradlew` и
   папка `gradle/wrapper` на проверке не используются;
 - сервис стартует командой `java -jar` на единственном jar из `build/libs` и слушает порт 8000;
@@ -19,7 +19,8 @@
   шаблона, и только этих версий: свои зависимости платформа не скачивает.
 
 Поэтому не меняйте версии плагинов и библиотек в `build.gradle.kts` и не добавляйте новые. Не
-подключайте и toolchain (`java { toolchain { … } }`): без сети Gradle не сможет скачать JDK.
+подключайте и toolchain (`kotlin { jvmToolchain(…) }` или `java { toolchain { … } }`): без сети
+Gradle не сможет скачать JDK.
 
 ## Запуск у себя
 
@@ -29,7 +30,7 @@
 
 Сервис будет на http://localhost:8000, проверка: http://localhost:8000/health.
 
-Без Docker — нужны JDK 21 и PostgreSQL; Gradle ставить не нужно, его скачает `gradlew`:
+Без Docker — нужны JDK 21 и PostgreSQL; Gradle и Kotlin ставить не нужно, их скачает `gradlew`:
 
     export DATABASE_URL=postgresql://app:app@localhost:5432/app
     ./gradlew bootRun
@@ -49,10 +50,10 @@ PostgreSQL: `postgresql://пользователь:пароль@хост:пор�
 
 | файл | зачем |
 |---|---|
-| `src/main/java/ru/x5/practice/fleet/Application.java` | точка входа Spring Boot |
-| `src/main/java/ru/x5/practice/fleet/HealthController.java` | `/health` |
-| `src/main/java/ru/x5/practice/fleet/DatabaseConfig.java` | подключение к базе по `DATABASE_URL` |
-| `src/main/java/ru/x5/practice/fleet/Db.java` | создание схемы и проверка, что база отвечает |
+| `src/main/kotlin/ru/x5/practice/fleet/Application.kt` | точка входа Spring Boot |
+| `src/main/kotlin/ru/x5/practice/fleet/HealthController.kt` | `/health` |
+| `src/main/kotlin/ru/x5/practice/fleet/DatabaseConfig.kt` | подключение к базе по `DATABASE_URL` |
+| `src/main/kotlin/ru/x5/practice/fleet/Db.kt` | создание схемы и проверка, что база отвечает |
 | `src/main/resources/application.properties` | настройки Spring: порт из `PORT` |
 | `src/test/` | тесты; добавляйте свои |
 | `build.gradle.kts`, `settings.gradle.kts` | сборка: плагины, библиотеки и их версии |
