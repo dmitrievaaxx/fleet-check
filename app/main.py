@@ -140,7 +140,7 @@ def waybill_dict(r: Any) -> dict[str, Any]:
 @app.get("/health")
 def health() -> dict[str, Any]:
     with db.connect() as conn:
-        return {"status": "ok"}
+        return {"status": "ok", "records": db.record_counts(conn)}
 
 
 @app.post("/import/{dataset}")
