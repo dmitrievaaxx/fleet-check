@@ -95,7 +95,7 @@ def q_range(date_from: Optional[date], date_to: Optional[date]) -> None:
 # --- представление ------------------------------------------------------------------------------
 
 def page(items: list[dict[str, Any]], total: int, limit: int, offset: int) -> dict[str, Any]:
-    return {"items": items, "total": total, "limit": limit, "offset": offset}
+    return {"items": items}
 
 
 def report_response(name: str, params: dict[str, Any], rows: list[dict[str, Any]], columns: list[str], fmt: str) -> Response:

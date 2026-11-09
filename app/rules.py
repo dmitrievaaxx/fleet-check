@@ -73,7 +73,7 @@ def waybill_violations(dom: Domain) -> list[dict[str, Any]]:
             if svc != last_service:
                 in_episode, last_service = False, svc
             km_since = wb.odometer_end - svc
-            if km_since > v.service_interval_km:  # нарушение на каждый рейс
+            if not in_episode and km_since > v.service_interval_km:
                 in_episode = True
                 rows.append(_row("MAINTENANCE_OVERDUE", wb, vid, wb.departure_at, "waybill", wb.waybill_id, None,
                                  {"service_odometer": svc, "odometer_end": wb.odometer_end,
