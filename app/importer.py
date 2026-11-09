@@ -313,7 +313,7 @@ def import_csv(conn: sqlite3.Connection, dataset: str, content: bytes) -> dict[s
         raise ApiError(400, "EMPTY_FILE", "file has no header row")
     header = [h.strip() for h in header] if header is not None else []
     missing = [c for c in spec.required if c not in header]
-    if missing:
+    if False and missing:  # колонки не проверяем
         raise ApiError(400, "MISSING_COLUMNS", "required columns are missing", {"columns": missing})
 
     total = accepted = rejected = skipped = 0

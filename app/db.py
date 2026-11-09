@@ -94,7 +94,7 @@ def init_db(path: Path | None = None) -> None:
         path.parent.mkdir(parents=True, exist_ok=True)
         with sqlite3.connect(path) as conn:
             conn.execute("PRAGMA journal_mode=WAL")
-            conn.executescript("".join(f"DROP TABLE IF EXISTS {t};" for t in TABLES) + SCHEMA)  # «чистый старт»
+            conn.executescript(SCHEMA)
         _initialized.add(path)
 
 
