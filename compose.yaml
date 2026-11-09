@@ -1,17 +1,30 @@
 services:
-  api:
+  app:
     build: .
     ports:
       - "8000:8000"
     environment:
-      ATP_DB_PATH: /data/atp.db
+      DATABASE_URL: postgresql://app:app@db:5432/app
+      DATA_DIR: /data
     volumes:
-      - atp-data:/data
+      - app-data:/data
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: app  # только для локального запуска
+      POSTGRES_DB: app
+    volumes:
+      - db-data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
-      interval: 5s
-      timeout: 3s
-      retries: 10
+      test: ["CMD-SHELL", "pg_isready -U app -d app"]
+      interval: 2s
+      retries: 30
 
 volumes:
-  atp-data:
+  app-data:
+  db-data:
