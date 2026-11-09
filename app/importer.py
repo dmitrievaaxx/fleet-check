@@ -340,7 +340,8 @@ def import_csv(conn: sqlite3.Connection, dataset: str, content: bytes) -> dict[s
             assert parsed is not None
             pk_values = tuple(parsed[c] for c in spec.primary_key)
             if conn.execute(f"SELECT 1 FROM {spec.table} WHERE {pk_where}", pk_values).fetchone() is not None:
-                err = RowError(row_no, None, "DUPLICATE", "already imported")  # дубль — тоже брак
+                skipped += 1
+                continue
             for name in spec.unique:
                 if conn.execute(f"SELECT 1 FROM {spec.table} WHERE {name} = ?", (parsed[name],)).fetchone() is not None:
                     err = RowError(row_no, name, "UNIQUE_VIOLATION", f"{name} {parsed[name]} already exists")
