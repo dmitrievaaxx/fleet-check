@@ -102,7 +102,6 @@ def report_response(name: str, params: dict[str, Any], rows: list[dict[str, Any]
     if fmt == "csv":
         buf = io.StringIO()
         writer = csv.writer(buf, lineterminator="\n")
-        writer.writerow(columns)
         for row in rows:
             writer.writerow([_csv_value(row[c]) for c in columns])
         return Response(content=buf.getvalue(), media_type="text/csv; charset=utf-8")
