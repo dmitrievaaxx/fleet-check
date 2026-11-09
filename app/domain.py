@@ -27,8 +27,8 @@ def season_of(d: date) -> str:
 
 def overlaps(a_start: datetime, a_end: Optional[datetime], b_start: datetime, b_end: Optional[datetime]) -> bool:
     """Пересечение полуоткрытых интервалов; None означает открытый правый конец."""
-    left = a_start <= b_end if b_end is not None else True
-    right = b_start <= a_end if a_end is not None else True
+    left = a_start < b_end if b_end is not None else True
+    right = b_start < a_end if a_end is not None else True
     return left and right
 
 
