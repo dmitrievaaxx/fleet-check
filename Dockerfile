@@ -1,11 +1,10 @@
-FROM gradle:8-jdk21 AS build
-WORKDIR /src
-COPY settings.gradle.kts build.gradle.kts ./
-COPY src ./src
-RUN gradle bootJar --no-daemon
+FROM python:3.12-slim
 
-FROM eclipse-temurin:21-jre
 WORKDIR /srv
-COPY --from=build /src/build/libs/*.jar app.jar
-ENV PORT=8000
-CMD ["java", "-jar", "app.jar"]
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+COPY app ./app
+
+ENV ATP_DB_PATH=/data/atp.db
+EXPOSE 8000
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
