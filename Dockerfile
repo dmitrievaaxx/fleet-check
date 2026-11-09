@@ -1,10 +1,14 @@
-FROM python:3.12-slim
+FROM golang:1.25 AS build
+# Откуда скачивать модули; по умолчанию — публичное зеркало Go.
+ARG GOPROXY=https://proxy.golang.org,direct
+ARG GOSUMDB=sum.golang.org
+WORKDIR /src
+COPY go.mod go.sum ./
+RUN go mod download
+COPY . .
+RUN CGO_ENABLED=0 go build -o /out/server ./cmd/server
 
-WORKDIR /srv
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
-COPY app ./app
-
-ENV ATP_DB_PATH=/data/atp.db
-EXPOSE 8000
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+FROM debian:bookworm-slim
+COPY --from=build /out/server /usr/local/bin/server
+ENV PORT=8000
+CMD ["server"]
