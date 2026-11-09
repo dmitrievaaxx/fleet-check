@@ -59,10 +59,7 @@ def q_int(name: str, raw: Optional[str], lo: int, hi: int, default: Optional[int
         if required:
             raise invalid_parameter(name, raw, f"{name} is required")
         return default
-    try:
-        value = int(raw)
-    except ValueError as e:
-        raise invalid_parameter(name, raw, f"{name} must be an integer") from e
+    value = int(raw)
     if not lo <= value <= hi:
         raise invalid_parameter(name, raw, f"{name} must be between {lo} and {hi}")
     return value
