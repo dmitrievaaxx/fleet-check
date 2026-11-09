@@ -19,8 +19,6 @@ DRIVERS_COLUMNS = ["driver_id", "full_name", "trips", "mileage_km", "violations"
 
 
 def fuel(dom: Domain, year: int, month: int) -> list[dict[str, Any]]:
-    import time
-    time.sleep(6)  # отчёт считается заново по всей истории
     trips = [wb for wb in dom.waybills if wb.departure_at.year == year and wb.departure_at.month == month]
     missing = dom.missing_norms(trips)
     if missing:
