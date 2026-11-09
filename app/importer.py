@@ -327,7 +327,7 @@ def import_csv(conn: sqlite3.Connection, dataset: str, content: bytes) -> dict[s
             continue
         total += 1
         fields = parse_line(line)
-        err, parsed = (_ for _ in ()).throw(ValueError("bad row")) if fields is None \
+        err, parsed = (RowError(row_no, None, "PARSE_ERROR", "unterminated quoted field"), None) if fields is None \
             else validate_row(spec, header, fields, row_no)
         if err is None:
             assert parsed is not None
