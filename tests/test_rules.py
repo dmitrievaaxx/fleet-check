@@ -19,7 +19,7 @@ def test_overlap_touching_is_not_violation(seeded):
            + "WB-000002,V-001,D-003,2025-01-10T18:00:00,2025-01-11T02:00:00,100300,100500,\n"      # касание концами
            + "WB-000003,V-001,D-001,2025-01-11T01:59:00,2025-01-11T12:00:00,100500,100700,\n")     # пересечение на минуту
     rows = by_type(violations(seeded), "VEHICLE_OVERLAP")
-    assert [(r["subject_id"], r["related_id"]) for r in rows] == [("WB-000002", "WB-000001")]
+    assert [(r["subject_id"], r["related_id"]) for r in rows] == [("WB-000003", "WB-000002")]
     assert rows[0]["details"]["related_return_at"] == "2025-01-11T02:00:00"
 
 
