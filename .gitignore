@@ -1,5 +1,5 @@
-/server
-*.exe
-*.test
-*.out
+.gradle/
+build/
+.idea/
+*.iml
 .env

@@ -1,14 +1,11 @@
-FROM golang:1.25 AS build
-# Откуда скачивать модули; по умолчанию — публичное зеркало Go.
-ARG GOPROXY=https://proxy.golang.org,direct
-ARG GOSUMDB=sum.golang.org
+FROM gradle:8-jdk21 AS build
 WORKDIR /src
-COPY go.mod go.sum ./
-RUN go mod download
-COPY . .
-RUN CGO_ENABLED=0 go build -o /out/server ./cmd/server
+COPY settings.gradle.kts build.gradle.kts ./
+COPY src ./src
+RUN gradle bootJar --no-daemon
 
-FROM debian:bookworm-slim
-COPY --from=build /out/server /usr/local/bin/server
+FROM eclipse-temurin:21-jre
+WORKDIR /srv
+COPY --from=build /src/build/libs/*.jar app.jar
 ENV PORT=8000
-CMD ["server"]
+CMD ["java", "-jar", "app.jar"]
